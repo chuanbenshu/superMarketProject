@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>添加账户</title>
+    <!-- 引入jquery -->
+    <script src="./libs/jquery/jquery.min.js"></script>
     <!-- vue.js -->
     <script src="./libs/vue/vue.min.js"></script>
     <!-- elementui 样式 -->
@@ -87,8 +89,8 @@
                             <span>账号管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="6-1">账号管理</el-menu-item>
-                            <el-menu-item index="6-2">添加账号</el-menu-item>
+                            <el-menu-item index="6-1"><a href="userList.html">账号管理</a></el-menu-item>
+                            <el-menu-item index="6-2"><a href="userAdd.html"> 添加账号</a></el-menu-item>
                             <el-menu-item index="6-3">密码修改</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
@@ -175,10 +177,12 @@
                     }
                 };
                 return {
+                    //表单需要的数据源
                     loginForm: {
                         username: '',
                         password: '',
-                        confirmpwd: ''
+                        confirmpwd: '',
+                        groups:''
                     },
                     // 验证规则
                     rules: {
@@ -213,8 +217,30 @@
                 //登录
                 submitForm(formName) {
                     this.$refs[formName].validate((valid) => {
+                    //如果验证通过 valid为true
                         if (valid) {
-                            alert('前端验证通过!' + ', 用户名是：' + this.loginForm.username + ',密码是:' + this.loginForm.password);
+                           //验证通过后需要将账号 密码发送给后端 采用 ajax的方式
+                           //测试是否有数据
+                          //console.log(this.loginForm.username,this.loginForm.password,this.loginForm.groups) 
+                        //   console.log($) 测试jquery
+                        // 用变量保存需要传输的数据
+                        const params={
+                            username:this.loginForm.username,
+                            password:this.loginForm.password,
+                            groups:this.loginForm.groups
+                        }
+                        //构造ajax 将数据传输给后端
+                        $.post('/users/userAdd',params,function(data){
+                            //console.log(data);
+                            if(data.errcode===1){
+                                //1.弹出增加成功信息
+                                 alert(data.msg)
+                                 //2.跳转到账户管理系统
+                                 location.href="./userList.html"
+                            }else{
+                                alert(data.msg)
+                            }
+                        })
                         } else {
                             console.log('验证不通过');
                             return false;

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>添加账户</title>
+    <!-- 引入jquery -->
+    <script src="./libs/jquery/jquery.min.js"></script>
+    <!-- 引入momemt -->
+    <script src="./libs/moment/moment.js"></script>
     <!-- vue.js -->
     <script src="./libs/vue/vue.min.js"></script>
     <!-- elementui 样式 -->
@@ -87,8 +91,8 @@
                             <span>账号管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="6-1">账号管理</el-menu-item>
-                            <el-menu-item index="6-2">添加账号</el-menu-item>
+                            <el-menu-item index="6-1"><a href="userList.html">账号管理</a></el-menu-item>
+                            <el-menu-item index="6-2"><a href="userAdd.html"> 添加账号</a></el-menu-item>
                             <el-menu-item index="6-3">密码修改</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
@@ -132,17 +136,17 @@
                         <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
                             <el-table-column type="selection" width="55">
                             </el-table-column>
-                            <el-table-column prop="name" label="用户名">
+                            <el-table-column prop="username" label="用户名">
                             </el-table-column>
                             <el-table-column prop="groups" label="用户组" show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column label="日期">
-                                <template slot-scope="scope">{{ scope.row.date }}</template>
+                                <template slot-scope="scope">{{ scope.row.ctime | formatCtime}}</template>
                             </el-table-column>
                             <el-table-column label="操作">
                                 <template slot-scope="scope">
                                     <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                    <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -164,21 +168,49 @@
             el: "#app",
             data() {
                 return {
-                    tableData: [{
-                        date: '2018-09-27',
-                        name: '梅西',
-                        groups: '超级管理员',
-                    }],
+                    tableData: [],
                     multipleSelection: []
                 }
             },
+            //vue实例创建完毕 没有挂载dom 适合准备dom
+            created(){
+                this.getALLUsers();
+            },
 
             methods: {
+                //封装一个请求所有数据的方法
+                getALLUsers(){
+                    //测试this指向 ：console.log(this)
+                    var _this = this;
+                    
+                    //发送ajax请求所有的用户数据
+                    $.get('./users/userList',function(data){
+                        // 测试 console.log(data)
+                        _this.tableData=data;
+                    })
+                },
                 handleOpen(key, keyPath) {
                     console.log(key, keyPath);
                 },
                 handleClose(key, keyPath) {
                     console.log(key, keyPath);
+                },
+                //删除功能
+                handleDelete(id){
+                    var _this = this;
+                    //发送ajax请求
+                    $.get(`./users/userDeleteOne?id=${id}`,function(data){
+                    // 测试 console.log(data)
+                    if(data.errcode===1){
+                        //1)弹出信息
+                        alert(data.msg)
+                        //重新获取一次数据（相当于刷新一次页面）
+                          _this.getALLUsers();
+                    }else{
+                        alert(data.msg)
+                    }
+                    
+                })
                 },
                 // toggleSelection(rows) {
                 //     if (rows) {
@@ -191,6 +223,13 @@
                 // },
                 handleSelectionChange(val) {
                     this.multipleSelection = val;
+                }
+            },
+            //过滤器
+            filters:{
+                //过滤时间
+                formatCtime(value){
+                 return moment(value).format("YYYY-MM-DD HH:mm:ss")
                 }
             }
 

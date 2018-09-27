@@ -2,6 +2,10 @@
     padding:0 ;
     margin: 0;
 }
+.el-menu-item>a{
+    color: #fff;
+    text-decoration: none;
+}
 .el-header, .el-footer {
     background-color: #fff;
     color: #333;
