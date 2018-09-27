@@ -1,0 +1,141 @@
+*{
+    padding:0 ;
+    margin: 0;
+}
+.el-header, .el-footer {
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+  }
+
+  
+.el-aside {
+    background-color: #2b2b2b;
+    color: #333;
+    text-align: right;
+  }
+#title,#nav>a{
+    color: #D1D0CF;
+    font-size: 12px;
+  }
+#title h5{
+      font-size: 24px;
+      text-align: center;
+      margin: 50px 0 50px ;
+      
+  }
+#title>p{
+    margin-right: 14px;
+ 
+}
+#nav{
+    margin-right: 14px;
+}
+#nav>a,#nav>span{
+    display: inline-block;
+    margin:24px 0 24px;
+    text-decoration: none;
+}
+  
+body > .el-container {
+    margin-bottom: 40px;
+  }
+  
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+  
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
+  /* 撑满全屏 */
+  html,body,#app, .el-container{
+      height: 100%;
+  }
+  /* 去掉icon */
+  .el-submenu__title i{
+      display: none;
+  }
+  .el-menu-item-group__title{
+      height: 0;
+  }
+  .el-submenu__title{
+      background-color: #5FA600 !important;
+      border-radius: 4px 0 0 4px !important;
+      width: 190px;
+      height: 32px;
+      position: relative;
+  }
+  .el-submenu__title>span{
+      display: inline-block;
+      height: 32px;
+      position: absolute;
+      right:14px;
+      top: -10px;
+  }
+  .el-submenu{
+      float: right;
+      clear: both;
+      border-bottom: none;
+      margin-bottom: 8px;
+  }
+  .el-menu-vertical-demo {
+      background-color: transparent !important;
+  }
+  .el-menu-item-group__title{
+      display: none;
+  }
+  .el-menu-item-group>ul{
+      margin-top: 0px !important;
+  }
+  .el-menu-item{
+    height: 30px !important;
+    line-height: 30px !important;
+    padding-right: 14px !important;
+  }
+  .el-menu-item-group>ul,.el-menu-item{
+    background-color:#2b2b2b; 
+}
+.el-menu--inline{
+    width: 190px;
+}
+  /* 右侧 */
+  .el-container:nth-child(2){
+    margin: 0 30px 0 30px;
+}
+  .el-header{
+    height: 124px !important;
+    font-size: 14px;
+    text-align: left;
+    padding: 0px;
+    line-height: 34px;
+}
+.el-header>h4{
+    margin-top: 40px;
+    font-size: 20px;
+}
+/* 右侧主页面 */
+
+.el-main,.el-card__header{
+    padding: 0;    
+}
+.box-card .clearfix{
+    height: 42px;
+    background-color: #f2f2f2;
+    font-size: 16px;
+    line-height: 42px;
+     text-indent: 1em;  
+     font-weight: bold;
+}
+.el-alert{
+    margin-bottom: 15px;
+}
+/* 尾部 */
+.el-footer {
+    font-size: 12px;
+    color: #333;
+    text-align: left;
+    border-top: 1px solid #ccc;
+}

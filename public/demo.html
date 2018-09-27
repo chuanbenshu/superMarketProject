@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加账户</title>
+    <!-- vue.js -->
+    <script src="./libs/vue/vue.min.js"></script>
+    <!-- elementui 样式 -->
+    <link rel="stylesheet" href="./libs/elementui/css/elementui.min.css">
+    <!-- 登录页面的样式 -->
+    <link rel="stylesheet" href="./styles/userAdd.css">
+    <!-- elementuzu组件 -->
+    <script src="./libs/elementui/js/elementui.min.js"></script>
+</head>
+<body>
+     <!-- dom -->
+     <div id="app">
+            <!-- 主体框架 -->
+            <el-container>
+                <!-- 左侧 -->
+                <el-aside width="222px">
+                    <!-- 左侧上边内容 -->
+                    <div id="title">
+                        <h5>华联超市管理系统</h5>
+                        <p>您好 admin</p>
+                        <div id="nav">
+                            <a href="">管理首页</a>
+                            <span>|</span>
+                            <a href="">退出系统</a>
+                        </div>
+                    </div>
+                    <!-- 左侧导航栏 -->
+                    <el-menu :unique-opened="true" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#292929"
+                        text-color="#fff" active-text-color="#ffd04b">
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <span>分类管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="1-1">分类管理</el-menu-item>
+                                <el-menu-item index="1-2">添加分类</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="2">
+                            <template slot="title">
+                                <span>商品管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="2-1">商品管理</el-menu-item>
+                                <el-menu-item index="2-2">添加商品</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="3">
+                            <template slot="title">
+                                <span>进货管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="3-1">库存管理</el-menu-item>
+                                <el-menu-item index="3-2">添加库存</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="4">
+                            <template slot="title">
+                                <span>出货管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="4-1">销售列表</el-menu-item>
+                                <el-menu-item index="4-2">商品出库</el-menu-item>
+                                <el-menu-item index="4-3">商品退货</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="5">
+                            <template slot="title">
+                                <span>统计管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="5-1">销售统计</el-menu-item>
+                                <el-menu-item index="5-2">进货统计</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="6">
+                            <template slot="title">
+                                <span>账号管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="6-1">账号管理</el-menu-item>
+                                <el-menu-item index="6-2">添加账号</el-menu-item>
+                                <el-menu-item index="6-3">密码修改</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="7">
+                            <template slot="title">
+                                <span>会员管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="7-1">账号管理</el-menu-item>
+                                <el-menu-item index="7-2">添加账号</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="8">
+                            <template slot="title">
+                                <span>系统管理</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="8-1">系统信息</el-menu-item>
+                                <el-menu-item index="8-2">系统配置</el-menu-item>
+                                <el-menu-item index="8-3">权限管理</el-menu-item>
+                                <el-menu-item index="8-4">添加管理组</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
+                <!-- 右侧 -->
+                <el-container>
+                    <!-- 右侧头部 -->
+                    <el-header>
+                        <h4>欢迎您 admin</h4>
+                        <span>查看详细的系统信息。</span>
+                    </el-header>
+                    <!-- 右侧主体内容 -->
+                    <el-main>
+                        
+                    </el-main>
+                    <!-- 页脚 -->
+                    <el-footer>
+                        <span>&copy; Copyright 2018 华联超市管理系统</span>
+                    </el-footer>
+                </el-container>
+            </el-container>
+        </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data:{},
+            methods: {
+                handleOpen(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                handleClose(key, keyPath) {
+                    console.log(key, keyPath);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

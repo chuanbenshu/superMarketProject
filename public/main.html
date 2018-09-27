@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加账户</title>
+    <!-- vue.js -->
+    <script src="./libs/vue/vue.min.js"></script>
+    <!-- elementui 样式 -->
+    <link rel="stylesheet" href="./libs/elementui/css/elementui.min.css">
+    <!-- 登录页面的样式 -->
+    <link rel="stylesheet" href="./styles/userAdd.css">
+    <!-- elementuzu组件 -->
+    <script src="./libs/elementui/js/elementui.min.js"></script>
+</head>
+<body>
+     <!-- dom -->
+     <div id="app">
+         <!-- 右侧 --> 
+        <el-container>
+            <!-- 右侧头部 -->
+            <el-header>
+                <h4>欢迎您 admin</h4>
+                <span>查看详细的系统信息。</span>
+            </el-header>
+            <!-- 右侧主体内容 -->
+            <el-main>
+                <el-card class="box-card">
+                    <!-- 主体内容头部 -->
+                    <div slot="header" class="clearfix">
+                        <span>系统信息</span>
+                    </div>
+                    <!-- 主体内容 -->
+                    <div class="text item">
+                        <el-alert type="success" title="成功提示的文案"> </el-alert>
+                        <el-alert type="info" title="消息提示的文案"></el-alert>
+                        <!-- 表格 -->
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <div class="grid-content bg-purple">
+                                    <el-card>
+                                        <div slot="header" class="clearfix">
+                                            <span>销售排行</span>
+                                        </div>
+                                        <div class="text item">
+                                            <el-table :data="tableData" style="width: 100%">
+                                                <el-table-column prop="goodsname" label="商品名称">
+                                                </el-table-column>
+                                                <el-table-column prop="sales" label="销量">
+                                                </el-table-column>
+
+                                            </el-table>
+                                        </div>
+                                    </el-card>
+                                </div>
+                            </el-col>
+                            <el-col :span="12">
+                                <div class="grid-content bg-purple-light">
+                                    <el-card>
+                                        <div slot="header" class="clearfix">
+                                            <span>缺货的商品</span>
+                                        </div>
+                                        <div class="text item">
+                                            <el-table :data="outstock" style="width: 100%">
+                                                <el-table-column prop="goodsname" label="商品名称">
+                                                </el-table-column>
+                                                <el-table-column prop="sales" label="库存">
+                                                </el-table-column>
+                                                <el-table-column prop="operation" label="操作">
+                                                    </el-table-column>
+                                            </el-table>
+                                        </div>
+                                    </el-card>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-card>
+            </el-main>
+            <!-- 页脚 -->
+            <el-footer>
+                <span>&copy; Copyright 2018 华联超市管理系统</span>
+            </el-footer>
+        </el-container>
+      </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data() {
+                return {
+                    tableData: [
+                        {
+                            goodsname: '海飞丝',
+                            sales: '15'
+                        },
+                        {
+                            goodsname: '松山',
+                            sales: '16'
+                        },
+                        {
+                            goodsname: '牛牌洗面奶',
+                            sales: '17'
+                        },
+                        {
+                            goodsname: 'minon',
+                            sales: '18'
+                        }
+                    ], 
+                    outstock:[
+                    {
+                      goodsname:'我的优乐美',
+                      sales: '18',
+                      operation:'入库'
+                    }
+                ]
+                }
+            },
+           
+        })
+    </script>
+</body>
+
+</html>
