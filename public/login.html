@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>登录界面</title>
+    <!-- jquery.min.js -->
+    <script src="./libs/jquery/jquery.min.js"></script>
     <!-- vue.js -->
     <script src="./libs/vue/vue.min.js"></script>
     <!-- elementui 样式 -->
@@ -17,6 +19,7 @@
 </head>
 
 <body>
+    
     <!-- 准备 dom -->
     <div id="app">
         <div id="loginBox">
@@ -84,7 +87,24 @@
                     this.$refs[formName].validate((valid) => {
                         //如果验证通过 
                         if (valid) {
-                            alert('前端验证通过!' + ', 用户名是：'+ this.loginForm.username + ',密码是:'+this.loginForm.password);
+                           //获取密码和用户名
+                           let  userInfo={
+                            username:this.loginForm.username,
+                            password:this.loginForm.password
+                           }
+                           //发送ajax请求给后端 携带数据
+                           $.post('./users/checkLogin',userInfo,function(data){
+                               //console.log(data)
+                               if(data.errcode===1){
+                                   //成功 弹出登录成功的信息
+                                   alert(data.msg)
+                                   //跳转到首页
+                                   location.href='./index.html'
+                               }else{
+                                   //弹出失败的信息
+                                alert(data.msg)
+                               }
+                           })
                         } else {//验证不通过
                             console.log('验证不通过');
                             return false;

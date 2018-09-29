@@ -15,7 +15,7 @@
     <!-- elementui 样式 -->
     <link rel="stylesheet" href="./libs/elementui/css/elementui.min.css">
     <!-- 登录页面的样式 -->
-    <link rel="stylesheet" href="./styles/userList.css">
+    <link rel="stylesheet" href="./styles/goodsList.css">
     <!-- elementuzu组件 -->
     <script src="./libs/elementui/js/elementui.min.js"></script>
     <!-- 前端发送请求   检测cookie是否存在 -->
@@ -41,7 +41,7 @@
                 </div>
                 <!-- 左侧导航栏 -->
                 <el-menu :unique-opened="true" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#292929"
-                    text-color="#fff" active-text-color="#ffd04b" :default-openeds="['6']" :default-active=" '6-2'">
+                    text-color="#fff" active-text-color="#ffd04b" :default-openeds="['2']" :default-active=" '2-1'">
                     <el-submenu index="1">
                         <template slot="title">
                             <span>分类管理</span>
@@ -56,7 +56,7 @@
                             <span>商品管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1"><a href="./goodsList.html">商品管理</a></el-menu-item>
+                            <el-menu-item index="2-1">商品管理</el-menu-item>
                             <el-menu-item index="2-2"><a href="./goodsAdd.html">添加商品</a></el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
@@ -125,37 +125,48 @@
                 <!-- 右侧头部 -->
                 <el-header>
                     <h4>欢迎您 admin</h4>
-                    <span>查看所有的管理员信息</span>
+                    <span>查看所有的商品信息</span>
                 </el-header>
                 <!-- 右侧主体内容 -->
                 <el-main>
                     <el-card class="box-card">
                         <!-- 主体内容头部 -->
                         <div slot="header" class="clearfix">
-                            <span>账号管理</span>
+                            <span>商品管理</span>
                         </div>
                         <!-- 表格 -->
                         <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
                             <el-table-column type="selection" width="55">
                             </el-table-column>
-                            <el-table-column prop="username" label="用户名">
+                            <el-table-column prop="barcode" label="商品条形码">
                             </el-table-column>
-                            <el-table-column prop="groups" label="用户组" show-overflow-tooltip>
+                            <el-table-column prop="goodsname" label="商品名称" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column label="日期">
+                            <el-table-column prop="classify" label="所属分类" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="goodsprice" label="售价（元）" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="purchaseprice" label="促销价（元）" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="marketprice" label="市场价（元）" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="goodsnumber" label="库存" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="totalprice" label="库存总额（元）" show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column prop="saleprice" label="销售总额 （元）" show-overflow-tooltip>
+                            </el-table-column>
+                            <!-- <el-table-column label="日期">
                                 <template slot-scope="scope">{{ scope.row.ctime | formatCtime}}</template>
-                            </el-table-column>
+                            </el-table-column> -->
                             <el-table-column label="操作">
                                 <template slot-scope="scope">
-                                    <el-button size="mini" @click="handleEdit(scope.row.id)">修改</el-button>
-                                    <el-button size="mini" :plain="true" type="danger" @click="handleDelete(scope.row.id)" @click="delsuccess">删除</el-button>
+                                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                    <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <div style="margin-top: 20px">
-                            <el-button :plain="true" @click="batchesDel()" @click="delsuccess">批量删除</el-button>
-                            <el-button @click="deselectall()">取消选择</el-button>
-                        </div>
+                        
                         </el-form>
                 </el-main>
                 <!-- 页脚 -->
@@ -174,102 +185,18 @@
                     multipleSelection: []
                 }
             },
-            //vue实例创建完毕 没有挂载dom 适合准备dom
-            created(){
-                this.getALLUsers();
-            },
 
             methods: {
-                //封装一个请求所有数据的方法
-                getALLUsers(){
-                    //测试this指向 ：console.log(this)
-                    var _this = this;
-                    
-                    //发送ajax请求所有的用户数据
-                    $.get('./users/userList',function(data){
-                        // 测试 console.log(data)
-                        _this.tableData=data;
-                    })
-                },
-                //成功的消息弹框
-                delsuccess(){
-                    this.$message({
-                    showClose: true,
-                    message: '成功删除',
-                    type: 'success'
-                   });
-                },
-                //修改功能的实现
-                handleEdit(id){
-                    //console.log(id)  打印是否接收到id
-                   //跳转到修改的页面 并且将id打包发出
-                  location.href=`./userEdit.html?id=${id}`
-                },
                 handleOpen(key, keyPath) {
                     console.log(key, keyPath);
                 },
                 handleClose(key, keyPath) {
                     console.log(key, keyPath);
                 },
-                //删除功能
-                handleDelete(id){
-                    var _this = this;
-                    //发送ajax请求
-                    $.get(`./users/userDeleteOne?id=${id}`,function(data){
-                    // 测试 console.log(data)
-                    if(data.errcode===1){
-                        //1)弹出信息
-                        _this.delsuccess()
-                        //重新获取一次数据（相当于刷新一次页面）
-                          _this.getALLUsers();
-                    }else{
-                        alert(data.msg)
-                    }
-                    
-                })
-                },
-                //取消选选中事件
-                deselectall(){
-                    this.$refs.multipleTable.clearSelection();
-                },
-                // 勾选就会触发的函数
                 handleSelectionChange(val) {
-                    // 把勾选中的数据 赋值给 multipleSelection
                     this.multipleSelection = val;
-                    //console.log(this.multipleSelection) 获取选中的数据
-                },
-                //批量删除
-                batchesDel(){
-                    var _this = this;
-                    //从勾选的数据里面 把id获取出来
-                    let idArr=this.multipleSelection.map(v => v.id) //console.log(idArr)
-                    //判断 如果没有选中 那么不发送请求 
-                    if(!idArr.length){
-                        alert("请至少选择一个数据")
-                        return false;//不提交请求
-                    }
-                   //发送ajax给后端 携带id
-                   $.post('./users/batchesDel',{'idArr':idArr},function(data){
-                       //console.log(data)
-                       if(data.errcode===1){
-                           //弹出消息
-                           _this.delsuccess()
-                           //刷新页面  相当于再获取一次数据
-                           _this.getALLUsers()
-                       }else{
-                        alert(data.msg)
-                       }
-                   })
-                  
                 }
             },
-            //过滤器
-            filters:{
-                //过滤时间
-                formatCtime(value){
-                 return moment(value).format("YYYY-MM-DD HH:mm:ss")
-                }
-            }
 
         })
     </script>

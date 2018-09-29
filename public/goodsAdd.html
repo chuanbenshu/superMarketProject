@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加账户</title>
+    <!-- 引入jquery -->
+    <script src="./libs/jquery/jquery.min.js"></script>
+    <!-- vue.js -->
+    <script src="./libs/vue/vue.min.js"></script>
+    <!-- elementui 样式 -->
+    <link rel="stylesheet" href="./libs/elementui/css/elementui.min.css">
+    <!-- 登录页面的样式 -->
+    <link rel="stylesheet" href="./styles/goodsAdd.css">
+    <!-- elementuzu组件 -->
+    <script src="./libs/elementui/js/elementui.min.js"></script>
+    <!-- 前端发送请求   检测cookie是否存在 -->
+    <script src="/users/checkIsLogin"></script>
+</head>
+
+<body>
+    <!-- dom -->
+    <div id="app">
+        <!-- 主体框架 -->
+        <el-container>
+            <!-- 左侧 -->
+            <el-aside width="222px">
+                <!-- 左侧上边内容 -->
+                <div id="title">
+                    <h5>华联超市管理系统</h5>
+                    <p>您好 admin</p>
+                    <div id="nav">
+                        <a href="">添加商品</a>
+                        <span>|</span>
+                        <a href="/users/logout">退出系统</a>
+                    </div>
+                </div>
+                <!-- 左侧导航栏 -->
+                <el-menu :unique-opened="true" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#292929"
+                    text-color="#fff" active-text-color="#ffd04b"  :default-openeds="['2']" :default-active=" '2-2'">
+                    <el-submenu index="1">
+                        <template slot="title">
+                            <span>分类管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="1-1">分类管理</el-menu-item>
+                            <el-menu-item index="1-2">添加分类</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="2">
+                        <template slot="title">
+                            <span>商品管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="2-1"><a href="./goodsList.html">商品管理</a></el-menu-item>
+                            <el-menu-item index="2-2">添加商品</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="3">
+                        <template slot="title">
+                            <span>进货管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="3-1">库存管理</el-menu-item>
+                            <el-menu-item index="3-2">添加库存</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="4">
+                        <template slot="title">
+                            <span>出货管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="4-1">销售列表</el-menu-item>
+                            <el-menu-item index="4-2">商品出库</el-menu-item>
+                            <el-menu-item index="4-3">商品退货</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="5">
+                        <template slot="title">
+                            <span>统计管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="5-1">销售统计</el-menu-item>
+                            <el-menu-item index="5-2">进货统计</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="6">
+                        <template slot="title">
+                            <span>账号管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="6-1"><a href="userList.html">账号管理</a></el-menu-item>
+                            <el-menu-item index="6-2"><a href="userAdd.html"> 添加账号</a></el-menu-item>
+                            <el-menu-item index="6-3">密码修改</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="7">
+                        <template slot="title">
+                            <span>会员管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="7-1">账号管理</el-menu-item>
+                            <el-menu-item index="7-2">添加账号</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="8">
+                        <template slot="title">
+                            <span>系统管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="8-1">系统信息</el-menu-item>
+                            <el-menu-item index="8-2">系统配置</el-menu-item>
+                            <el-menu-item index="8-3">权限管理</el-menu-item>
+                            <el-menu-item index="8-4">添加管理组</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+            <!-- 右侧 -->
+            <el-container>
+                <!-- 右侧头部 -->
+                <el-header>
+                    <h4>欢迎您 admin</h4>
+                    <span>添加商品</span>
+                </el-header>
+                <!-- 右侧主体内容 -->
+                <el-main>
+                    <el-card class="box-card">
+                        <!-- 主体内容头部 -->
+                        <div slot="header" class="clearfix">
+                            <span>添加商品</span>
+                        </div>
+                        <!-- 表单验证 -->
+                        <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm" label-width="100px" class="demo-ruleForm">
+                            <el-form-item label="所属分类" prop="classify">
+                                <el-select v-model="loginForm.classify" placeholder="选择分类">
+                                  <el-option label="优乐美" value="优乐美"></el-option>
+                                  <el-option label="海飞丝" value="海飞丝"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="商品条形码" prop="barcode">
+                                <el-input type="text" v-model="loginForm.barcode" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品名称" prop="goodsname">
+                                <el-input type="text" v-model="loginForm.goodsname" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品售价" prop="goodsprice">
+                                <el-input v-model="loginForm.goodsprice"></el-input>
+                            </el-form-item>
+                            <el-form-item label="市场价" prop="marketprice">
+                                <el-input v-model="loginForm.marketprice"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品进价" prop="purchaseprice">
+                                <el-input v-model="loginForm.purchaseprice"></el-input>
+                            </el-form-item>
+                            <el-form-item label="入库数量" prop="goodsnumber">
+                                <el-input v-model="loginForm.goodsnumber"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品重量" prop="weight">
+                                <el-input v-model="loginForm.weight"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品单位" prop="company">
+                                <el-input v-model="loginForm.company"></el-input>
+                            </el-form-item>
+                            <el-form-item label="会员优惠" prop="discount">
+                                <el-radio-group v-model="loginForm.discount">
+                                  <el-radio label="享受"></el-radio>
+                                  <el-radio label="不享受"></el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                              <el-form-item label="是否促销" prop="promotion">
+                                <el-radio-group v-model="loginForm.promotion">
+                                  <el-radio label="应用"></el-radio>
+                                  <el-radio label="禁用"></el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                              <el-form-item label="商品简介" prop="desc">
+                                <el-input type="textarea" v-model="loginForm.desc"></el-input>
+                              </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitForm('loginForm')">添加</el-button>
+                                <el-button @click="resetForm('loginForm')">重置</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-card>
+                </el-main>
+                <!-- 页脚 -->
+                <el-footer>
+                    <span>&copy; Copyright 2018 华联超市管理系统</span>
+                </el-footer>
+            </el-container>
+        </el-container>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data() {
+                return {
+                    //表单需要的数据源
+                    loginForm: {
+                        classify: '',
+                        barcode: '',
+                        goodsname: '',
+                        goodsprice:'',
+                        marketprice:'',
+                        purchaseprice:'',
+                        goodsnumber:''
+                    },
+                    // 验证规则
+                    rules: {
+                         // 选择分类
+                         classify: [
+                            {required: true, message: "选择分类", trigger:'change'}
+                        ],
+                        // 条形码
+                        barcode: [
+                            { required: true, message: '请输入条形码', trigger: 'blur' }, // 非空验证
+                            { min: 6, max: 10, message: '用户名长度在 6到 10 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //商品名称
+                        goodsname: [
+                            { required: true, message: '请输入商品名称', trigger: 'blur' }, // 非空验证
+                            { min: 4, max: 8, message: '长度在 4 到 8 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //商品售价
+                        goodsprice : [
+                            { required: true, message: '请输入商品售价', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 5, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //市场价
+                        marketprice : [
+                            { required: true, message: '请输入市场价', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 5, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //商品进价
+                        purchaseprice : [
+                            { required: true, message: '请输入商品进价', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 5, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //入库数量
+                        goodsnumber : [
+                            { required: true, message: '请输入入库数量', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 5, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //商品重量
+                        weight : [
+                            { required: true, message: '请输入商品重量', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 5, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //商品单位
+                        company : [
+                            { required: true, message: '请输入商品单位', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 5, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //会员优惠是否享受
+                        discount : [
+                           {required: true, message: '请输入选择是否有会员优惠',trigger:'change'}
+                        ],
+                        //是否促销
+                        promotion : [
+                           {required: true, message: '请输入选择是否促销',trigger:'change'}
+                        ],
+                        //商品简介
+                        desc : [
+                            { required: true, message: '请输入商品简介', trigger: 'blur' }, // 非空验证
+                            { min: 1, max: 200, message: '长度在 1 到5 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        
+                    }
+                };
+            },
+            methods: {
+                handleOpen(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                handleClose(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                //登录
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                    //如果验证通过 valid为true
+                        if (valid) {
+                            console.log('成功')
+                           //验证通过后需要将账号 密码发送给后端 采用 ajax的方式
+                           //测试是否有数据
+                          //console.log(this.loginForm.username,this.loginForm.password,this.loginForm.groups) 
+                        //   console.log($) 测试jquery
+                        // 用变量保存需要传输的数据
+                    //     const params={
+                    //         username:this.loginForm.username,
+                    //         password:this.loginForm.password,
+                    //         groups:this.loginForm.groups
+                    //     }
+                    //     //构造ajax 将数据传输给后端
+                    //     $.post('/users/userAdd',params,function(data){
+                    //         //console.log(data);
+                    //         if(data.errcode===1){
+                    //             //1.弹出增加成功信息
+                    //              alert(data.msg)
+                    //              //2.跳转到账户管理系统
+                    //              location.href="./userList.html"
+                    //         }else{
+                    //             alert(data.msg)
+                    //         }
+                    //     })
+                       } else {
+                           console.log('验证不通过');
+                            return false;
+                        }
+                     });
+                },
+                // 重置
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

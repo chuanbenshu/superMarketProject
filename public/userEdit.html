@@ -8,14 +8,12 @@
     <title>添加账户</title>
     <!-- 引入jquery -->
     <script src="./libs/jquery/jquery.min.js"></script>
-    <!-- 引入momemt -->
-    <script src="./libs/moment/moment.js"></script>
     <!-- vue.js -->
     <script src="./libs/vue/vue.min.js"></script>
     <!-- elementui 样式 -->
     <link rel="stylesheet" href="./libs/elementui/css/elementui.min.css">
     <!-- 登录页面的样式 -->
-    <link rel="stylesheet" href="./styles/userList.css">
+    <link rel="stylesheet" href="./styles/userAdd.css">
     <!-- elementuzu组件 -->
     <script src="./libs/elementui/js/elementui.min.js"></script>
     <!-- 前端发送请求   检测cookie是否存在 -->
@@ -41,7 +39,7 @@
                 </div>
                 <!-- 左侧导航栏 -->
                 <el-menu :unique-opened="true" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#292929"
-                    text-color="#fff" active-text-color="#ffd04b" :default-openeds="['6']" :default-active=" '6-2'">
+                    text-color="#fff" active-text-color="#ffd04b"  :default-openeds="['6']" :default-active=" '6-1'">
                     <el-submenu index="1">
                         <template slot="title">
                             <span>分类管理</span>
@@ -125,38 +123,35 @@
                 <!-- 右侧头部 -->
                 <el-header>
                     <h4>欢迎您 admin</h4>
-                    <span>查看所有的管理员信息</span>
+                    <span>修改账号信息</span>
                 </el-header>
                 <!-- 右侧主体内容 -->
                 <el-main>
                     <el-card class="box-card">
                         <!-- 主体内容头部 -->
                         <div slot="header" class="clearfix">
-                            <span>账号管理</span>
+                            <span>修改账号信息</span>
                         </div>
-                        <!-- 表格 -->
-                        <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-                            <el-table-column type="selection" width="55">
-                            </el-table-column>
-                            <el-table-column prop="username" label="用户名">
-                            </el-table-column>
-                            <el-table-column prop="groups" label="用户组" show-overflow-tooltip>
-                            </el-table-column>
-                            <el-table-column label="日期">
-                                <template slot-scope="scope">{{ scope.row.ctime | formatCtime}}</template>
-                            </el-table-column>
-                            <el-table-column label="操作">
-                                <template slot-scope="scope">
-                                    <el-button size="mini" @click="handleEdit(scope.row.id)">修改</el-button>
-                                    <el-button size="mini" :plain="true" type="danger" @click="handleDelete(scope.row.id)" @click="delsuccess">删除</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div style="margin-top: 20px">
-                            <el-button :plain="true" @click="batchesDel()" @click="delsuccess">批量删除</el-button>
-                            <el-button @click="deselectall()">取消选择</el-button>
-                        </div>
+                        <!-- 表单验证 -->
+                        <el-form :model="editForm" status-icon :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm">
+                            <el-form-item label="用户名" prop="username">
+                                <el-input type="text" v-model="editForm.username" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="密码" prop="password">
+                                <el-input type="password" v-model="editForm.password" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="选择用户组" prop="groups">
+                                    <el-select v-model="editForm.groups" placeholder="请选择用户组">
+                                      <el-option label="普通用户" value="普通用户"></el-option>
+                                      <el-option label="超级管理员" value="超级管理员"></el-option>
+                                    </el-select>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitForm('editForm')">修改</el-button>
+                                <el-button @click="resetForm('editForm')">重置</el-button>
+                            </el-form-item>
                         </el-form>
+                    </el-card>
                 </el-main>
                 <!-- 页脚 -->
                 <el-footer>
@@ -170,107 +165,94 @@
             el: "#app",
             data() {
                 return {
-                    tableData: [],
-                    multipleSelection: []
-                }
+                    //表单需要的数据源
+                    editForm: {
+                        username: '',
+                        password: '',
+                        groups:''
+                    },
+                    // 验证规则
+                    rules: {
+                        // 用户名
+                        username: [
+                            { required: true, message: '请输入用户名', trigger: 'blur' }, // 非空验证
+                            { min: 5, max: 12, message: '用户名长度在 5 到 12 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                        //密码
+                        password: [
+                            { required: true, message: '请输入密码', trigger: 'blur' }, // 非空验证
+                            { min: 6, max: 12, message: '密码长度在 6 到 12 个字符', trigger: 'blur' } // 长度验证
+                        ],
+                         // 选择用户组
+                         groups: [
+                            {required: true, message: "请选择用户组", trigger:'change'}
+                        ]
+                    }
+                };
             },
-            //vue实例创建完毕 没有挂载dom 适合准备dom
+            //生命周期钩子函数   用来准备数据
             created(){
-                this.getALLUsers();
-            },
+                //获取的带id的网址  http://localhost:256/userEdit.html?id=12
+                 //保存this 
+                 let _this=this;
+                 //获取id
+                 //console.log(location.href)  http://localhost:256/userEdit.html?id=12
+                 let id=location.href.split('=')[1]
+                 //console.log(id) 获取到id
+                 //发送ajax请求给后端  携带id
+                 $.get(`./users/useredit?id=${id}`,function(data){
+                     //console.log(data[0])
+                     _this.editForm.username=data[0].username
+                     _this.editForm.password=data[0].username
+                     _this.editForm.groups=data[0].groups
+                 })
 
+            },
             methods: {
-                //封装一个请求所有数据的方法
-                getALLUsers(){
-                    //测试this指向 ：console.log(this)
-                    var _this = this;
-                    
-                    //发送ajax请求所有的用户数据
-                    $.get('./users/userList',function(data){
-                        // 测试 console.log(data)
-                        _this.tableData=data;
-                    })
-                },
-                //成功的消息弹框
-                delsuccess(){
-                    this.$message({
-                    showClose: true,
-                    message: '成功删除',
-                    type: 'success'
-                   });
-                },
-                //修改功能的实现
-                handleEdit(id){
-                    //console.log(id)  打印是否接收到id
-                   //跳转到修改的页面 并且将id打包发出
-                  location.href=`./userEdit.html?id=${id}`
-                },
                 handleOpen(key, keyPath) {
                     console.log(key, keyPath);
                 },
                 handleClose(key, keyPath) {
                     console.log(key, keyPath);
                 },
-                //删除功能
-                handleDelete(id){
-                    var _this = this;
-                    //发送ajax请求
-                    $.get(`./users/userDeleteOne?id=${id}`,function(data){
-                    // 测试 console.log(data)
-                    if(data.errcode===1){
-                        //1)弹出信息
-                        _this.delsuccess()
-                        //重新获取一次数据（相当于刷新一次页面）
-                          _this.getALLUsers();
-                    }else{
-                        alert(data.msg)
-                    }
-                    
-                })
+                //修改
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                    //如果验证通过 valid为true
+                        if (valid) {
+                           //验证通过后需要将修改后的数据发送给后端 采用 ajax的方式
+                           //测试是否有数据
+                         // console.log(this.editForm.username,this.editForm.password,this.editForm.groups,location.href.split('=')[1]) 
+                        // 用变量保存需要传输的数据
+                        const params={
+                            username:this.editForm.username,
+                            password:this.editForm.password,
+                            groups:this.editForm.groups,
+                            id:location.href.split('=')[1]
+                        }
+                        //构造ajax 将数据传输给后端
+                        $.post('/users/saveedit',params,function(data){
+                            //console.log(data);
+                            if(data.errcode===1){
+                                //弹出提示信息
+                                alert(data.msg);
+                                //跳转到账户列表页面
+                                location.href="./userList.html"
+                            }else{
+                                alert(data.msg)
+                            }
+                        })
+                        } else {
+                            console.log('验证不通过');
+                            return false;
+                        }
+                    });
                 },
-                //取消选选中事件
-                deselectall(){
-                    this.$refs.multipleTable.clearSelection();
-                },
-                // 勾选就会触发的函数
-                handleSelectionChange(val) {
-                    // 把勾选中的数据 赋值给 multipleSelection
-                    this.multipleSelection = val;
-                    //console.log(this.multipleSelection) 获取选中的数据
-                },
-                //批量删除
-                batchesDel(){
-                    var _this = this;
-                    //从勾选的数据里面 把id获取出来
-                    let idArr=this.multipleSelection.map(v => v.id) //console.log(idArr)
-                    //判断 如果没有选中 那么不发送请求 
-                    if(!idArr.length){
-                        alert("请至少选择一个数据")
-                        return false;//不提交请求
-                    }
-                   //发送ajax给后端 携带id
-                   $.post('./users/batchesDel',{'idArr':idArr},function(data){
-                       //console.log(data)
-                       if(data.errcode===1){
-                           //弹出消息
-                           _this.delsuccess()
-                           //刷新页面  相当于再获取一次数据
-                           _this.getALLUsers()
-                       }else{
-                        alert(data.msg)
-                       }
-                   })
-                  
-                }
-            },
-            //过滤器
-            filters:{
-                //过滤时间
-                formatCtime(value){
-                 return moment(value).format("YYYY-MM-DD HH:mm:ss")
+                // 重置
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
                 }
             }
-
         })
     </script>
 </body>

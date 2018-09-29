@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+// var goodsRouter = require('./routes/goods');
 
 var app = express();
 
@@ -21,6 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// app.use('/users', goodsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -38,8 +41,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 //监听端口
-app.listen(999,() =>{
-  console.log('服务器启动成功！ 端口号是：999')
+app.listen(256,() =>{
+  console.log('服务器启动成功！ 端口号是：256')
 })
 
 module.exports = app;

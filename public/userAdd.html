@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="./styles/userAdd.css">
     <!-- elementuzu组件 -->
     <script src="./libs/elementui/js/elementui.min.js"></script>
+    <!-- 前端发送请求   检测cookie是否存在 -->
+    <script src="/users/checkIsLogin"></script>
 </head>
 
 <body>
@@ -32,7 +34,7 @@
                     <div id="nav">
                         <a href="">管理首页</a>
                         <span>|</span>
-                        <a href="">退出系统</a>
+                        <a href="/users/logout">退出系统</a>
                     </div>
                 </div>
                 <!-- 左侧导航栏 -->
@@ -52,8 +54,8 @@
                             <span>商品管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1">商品管理</el-menu-item>
-                            <el-menu-item index="2-2">添加商品</el-menu-item>
+                            <el-menu-item index="2-1"><a href="./goodsList.html">商品管理</a></el-menu-item>
+                            <el-menu-item index="2-2"><a href="./goodsAdd.html">添加商品</a></el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="3">
@@ -139,7 +141,7 @@
                                 <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="确认密码" prop="confirmpwd">
-                                <el-input v-model.number="loginForm.confirmpwd"></el-input>
+                                <el-input v-model="loginForm.confirmpwd"></el-input>
                             </el-form-item>
                             <el-form-item label="选择用户组" prop="groups">
                                     <el-select v-model="loginForm.groups" placeholder="请选择用户组">
@@ -148,7 +150,7 @@
                                     </el-select>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+                                <el-button type="primary" @click="submitForm('loginForm')">增加</el-button>
                                 <el-button @click="resetForm('loginForm')">重置</el-button>
                             </el-form-item>
                         </el-form>
